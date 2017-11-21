@@ -1,7 +1,10 @@
 package com.foobar.WorldData.dao;
 
+import java.util.List;
 import java.util.logging.Logger;
 
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
 import com.foobar.WorldData.model.City;
@@ -18,5 +21,21 @@ public class CityDao extends RootDao<Integer, City> {
 			return null;
 		}
 		return city;
+	}
+	
+	public City getCityByName(String name)
+	{
+		Criteria criteria = getCriteria();
+		criteria.add(Restrictions.eq("Name", name));
+		City city = (City) criteria.uniqueResult();
+		return city;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<City> getCitiesByCountryCode(String countryCode)
+	{
+		Criteria criteria = getCriteria();
+		criteria.add(Restrictions.eq("city_countryCode", countryCode));
+		return (List<City>) criteria.list();	
 	}
 }

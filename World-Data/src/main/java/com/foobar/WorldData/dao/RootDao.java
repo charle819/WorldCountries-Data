@@ -9,50 +9,44 @@ import javax.persistence.PersistenceContext;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 
-public abstract class RootDao <K,T extends Serializable> {
+public abstract class RootDao<K, T extends Serializable> {
 
-private Class<T> persistenceClass;
-	
+	private Class<T> persistenceClass;
+
 	@PersistenceContext
 	EntityManager entityManager;
-	
+
 	@SuppressWarnings("unchecked")
 	public RootDao() {
-		persistenceClass = (Class<T>) ((ParameterizedType)this.getClass().getGenericSuperclass()).getActualTypeArguments()[1];
+		persistenceClass = (Class<T>) ((ParameterizedType) this.getClass().getGenericSuperclass())
+				.getActualTypeArguments()[1];
 	}
-	
-	protected Session getSession()
-	{
+
+	protected Session getSession() {
 		return entityManager.unwrap(Session.class);
 	}
-	
-	protected EntityManager getEntityManager()
-	{
+
+	protected EntityManager getEntityManager() {
 		return entityManager;
 	}
-	
-	protected T getById(K id)
-	{
+
+	protected T getById(K id) {
 		return (T) entityManager.find(persistenceClass, id);
 	}
 
-	protected void persist(T entity)
-	{
+	protected void persist(T entity) {
 		entityManager.persist(entity);
 	}
-	
-	protected void update(T entity)
-	{
+
+	protected void update(T entity) {
 		entityManager.merge(entity);
 	}
-	
-	protected void delete(T entity)
-	{
+
+	protected void delete(T entity) {
 		entityManager.remove(entity);
 	}
-	
-	protected Criteria getCriteria()
-	{
+
+	protected Criteria getCriteria() {
 		return getSession().createCriteria(persistenceClass);
 	}
 }
