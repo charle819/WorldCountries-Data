@@ -43,28 +43,6 @@ public class WorldDataController {
 		}
 		return new ResponseEntity<City>(city, HttpStatus.OK);
 	}
-
-	/********************************** Retrieve Cities by CountryCode ***********************************/
-	
-	@RequestMapping(value = "/city", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<City>> getCitiesByCountryCode(@RequestParam(value = "code", required = false) String countryCode) {
-		List<City> cities = cityService.getCitiesByCountryCode(countryCode);
-
-		if (cities == null) {
-			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-		}
-		return new ResponseEntity<List<City>>(cities, HttpStatus.OK);
-	}
-
-	/********************************** Get No of Cities ***********************************/
-	
-	@RequestMapping(value="/city/size",method=RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Long> getNoOfCities()
-	{
-		Long noOfCities = cityService.getNoOFCities();
-		return new ResponseEntity<Long>(noOfCities, HttpStatus.OK);
-	}
-	
 	
 	/********************************** Add new City ***********************************/
 	@RequestMapping(value="/city",method = RequestMethod.POST)
@@ -105,6 +83,28 @@ public class WorldDataController {
 		}
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
+
+	/********************************** Retrieve Cities by CountryCode ***********************************/
+	
+	@RequestMapping(value = "/city" ,method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<City>> getCitiesByCountryCode(@RequestParam(value="code",required=false) String countryCode) {
+		List<City> cities = cityService.getCitiesByCountryCode(countryCode);
+
+		if (cities == null) {
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		}
+		return new ResponseEntity<List<City>>(cities, HttpStatus.OK);
+	}
+
+	/********************************** Get No of Cities ***********************************/
+	
+	@RequestMapping(value="/city/size",method=RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Long> getNoOfCities()
+	{
+		Long noOfCities = cityService.getNoOFCities();
+		return new ResponseEntity<Long>(noOfCities, HttpStatus.OK);
+	}
+
 	
 	/********************************** Get all cities between a range ***********************************/
 	@RequestMapping(value="/city/all",method=RequestMethod.GET,produces=MediaType.APPLICATION_JSON_VALUE)
