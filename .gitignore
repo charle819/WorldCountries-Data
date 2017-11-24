@@ -1,0 +1,28 @@
+# Compipled Source #
+####################
+*.class
+
+# Log file #
+############
+*.log
+
+# Package Files #
+#################
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# Ignoring directories/folders #
+########################################
+*/webapp
+*/target
+
+# Others #
+##########
+.settings
+.classpath
+.project
+
