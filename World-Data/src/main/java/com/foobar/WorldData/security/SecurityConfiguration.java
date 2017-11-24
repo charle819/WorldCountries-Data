@@ -18,6 +18,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 	@Autowired 
 	private CustomBasicAuthenticationEntryPoint authEntryPoint;
 	 
+	@Autowired
+	private AuthAccessDeniedHandler authAccessDeniedHandler;
 	
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception
@@ -37,15 +39,16 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 		 * Also for session creation policy "NEVER" is used , thus sesssion management will continue if and only if provided from other system
 		 * 
 		 **/
-		 
 		
-		http.authorizeRequests()
+		http.requiresChannel()
+			.and()
+			.authorizeRequests()
 			.antMatchers("/").permitAll()
 			.antMatchers("/city/**").hasRole("ADMIN")
 			.and()
 			.httpBasic().authenticationEntryPoint(authEntryPoint)
 			.and()
-			.exceptionHandling().accessDeniedHandler(getAuthAccessDeniedHandler())
+			.exceptionHandling().accessDeniedHandler(authAccessDeniedHandler)
 			.and()
 			.csrf().disable()
 			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.NEVER);
@@ -78,10 +81,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 		return new AuthFailureHandler();
 	}
 	
-	@Bean
-	public AuthAccessDeniedHandler getAuthAccessDeniedHandler()
-	{
-		return new AuthAccessDeniedHandler();
-	}
+//	@Bean
+//	public AuthAccessDeniedHandler getAuthAccessDeniedHandler()
+//	{
+//		return new AuthAccessDeniedHandler();
+//	}
 	
 }
