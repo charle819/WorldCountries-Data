@@ -18,7 +18,8 @@
 # Ignoring directories/folders #
 ########################################
 */webapp
-*/target/
+*/target
+*/target/*
 
 # Others #
 ##########
