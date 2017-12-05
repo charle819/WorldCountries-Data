@@ -1,14 +1,19 @@
 package com.foobar.WorldData.service;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.logging.Logger;
 
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.foobar.WorldData.dao.CityDao;
 import com.foobar.WorldData.model.City;
+import com.foobar.WorldData.utility.WorldDataExcelGenerator;
 
 @Service
 @Transactional
@@ -19,6 +24,9 @@ public class CityService {
 	@Autowired
 	CityDao cityDao;
 
+	@Autowired
+	WorldDataExcelGenerator excelGenerator;
+	
 	public City getCityByName(String name) {
 		City city = cityDao.getCityByName(name);
 		if (city == null) {
@@ -97,5 +105,22 @@ public class CityService {
 			return null;
 		}
 		return cities;
+	}
+	
+	public void generateCityExcelSheet(HttpServletResponse response, int startIndex , int noOfRows)
+	{
+		List<City> cityList =  getAllCities(startIndex, noOfRows);
+			
+		String fileName = "CityData.xlsx";
+		response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+		response.setHeader("Content-Disposition", "attachment; filename=" + fileName);
+		Workbook workbook = excelGenerator.generateCityExcelSheet(cityList);
+		
+		try {
+			workbook.write(response.getOutputStream());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

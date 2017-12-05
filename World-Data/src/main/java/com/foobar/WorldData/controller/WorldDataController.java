@@ -3,6 +3,8 @@ package com.foobar.WorldData.controller;
 import java.util.List;
 import java.util.logging.Logger;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -117,5 +119,13 @@ public class WorldDataController {
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}
 		return new ResponseEntity<List<City>>(cities, HttpStatus.OK);
+	}
+	
+	/********************************** Generate City Excel-Sheet ***********************************/
+	@RequestMapping(value="/city/excel",method=RequestMethod.GET)
+	public void getCityExcelSheet(HttpServletResponse response,@RequestParam(value="start",defaultValue="0",required=false) int startIndex,@RequestParam(value="total",defaultValue="10",required=false) int noOfCities)
+	{
+		LOGGER.info("Generating excel sheet for city from index : "+startIndex+" till index :"+noOfCities);
+		cityService.generateCityExcelSheet(response, startIndex, noOfCities);
 	}
 }
