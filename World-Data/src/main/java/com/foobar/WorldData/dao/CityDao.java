@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Projection;
+import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
@@ -60,5 +61,18 @@ public class CityDao extends RootDao<Integer, City> {
 		criteria.setFirstResult(startIndex);
 		criteria.setMaxResults(noOfRows);
 		return (List<City>) criteria.list();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Object[]> getPopulation(String countryCode)
+	{
+		Criteria criteria = getCriteria();
+		ProjectionList pList = Projections.projectionList();
+		pList.add(Projections.property("city_name"));
+		pList.add(Projections.property("city_population"));
+		criteria.setProjection(pList);
+		criteria.add(Restrictions.eq("city_countryCode", countryCode));
+		
+		return (List<Object[]>) criteria.list();
 	}
 }

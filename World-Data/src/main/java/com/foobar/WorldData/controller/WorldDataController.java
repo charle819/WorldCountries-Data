@@ -19,7 +19,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.foobar.WorldData.model.City;
+import com.foobar.WorldData.model.Country;
+import com.foobar.WorldData.model.PopulationVO;
 import com.foobar.WorldData.service.CityService;
+import com.foobar.WorldData.service.CountryService;
 
 @RestController
 @RequestMapping(value = "/")
@@ -29,6 +32,9 @@ public class WorldDataController {
 	
 	@Autowired
 	CityService cityService;
+	
+	@Autowired
+	CountryService countryService;
 
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public ResponseEntity<String> appInitializationMessage() {
@@ -121,6 +127,19 @@ public class WorldDataController {
 		return new ResponseEntity<List<City>>(cities, HttpStatus.OK);
 	}
 	
+	/********************************** Get city population ***********************************/
+	@RequestMapping(value="city/popul",method=RequestMethod.GET,produces=MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<PopulationVO>> getCityPopulation(@RequestParam(value="code",required=false,defaultValue="AFG") String countryCode)
+	{
+		List<PopulationVO> cityPopulation = cityService.getCityPopulationData(countryCode);
+		if(cityPopulation == null)
+		{
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		}		
+		return new ResponseEntity<List<PopulationVO>>(cityPopulation, HttpStatus.OK);
+	}
+	
+	
 	/********************************** Generate City Excel-Sheet ***********************************/
 	@RequestMapping(value="/city/excel",method=RequestMethod.GET)
 	public void getCityExcelSheet(HttpServletResponse response,@RequestParam(value="start",defaultValue="0",required=false) int startIndex,@RequestParam(value="total",defaultValue="10",required=false) int noOfCities)
@@ -128,4 +147,59 @@ public class WorldDataController {
 		LOGGER.info("Generating excel sheet for city from index : "+startIndex+" till index :"+noOfCities);
 		cityService.generateCityExcelSheet(response, startIndex, noOfCities);
 	}
+	
+	
+	/**************************************************** Country Services *****************************************************/
+	
+	/********************************** Fetch City by Name ***********************************/	
+	
+	@RequestMapping(value="/country/{name}",method=RequestMethod.GET,produces=MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Country> getCountry(@PathVariable(value="name") String countryName)
+	{
+		Country country =  countryService.getCountyByName(countryName);
+		if(country == null)
+		{
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+		return new ResponseEntity<Country>(country, HttpStatus.OK);
+	
+	}
+	
+	/********************************** Update Country ***********************************/
+	@RequestMapping(value="country/{name}",method=RequestMethod.PUT,produces=MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Country> updateCountry(@RequestBody Country country,@PathVariable(value="name") String countryName)
+	{
+		Country updatedCountry = countryService.updateCountryDetails(country);
+		if(updatedCountry == null)
+		{
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+		return new ResponseEntity<Country>(updatedCountry, HttpStatus.OK);
+	}
+	
+	/********************************** Get all countries between a range ***********************************/
+	@RequestMapping(value="/country/all",method=RequestMethod.GET,produces=MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<Country>> getCountries(@RequestParam(value="start", defaultValue="0",required=false) int startIndex,@RequestParam(value="total",defaultValue="10",required=false) int total)
+	{
+		List<Country> countries = countryService.getCoutries(startIndex, total);
+		if(countries == null)
+		{
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		}
+		return new ResponseEntity<List<Country>>(countries, HttpStatus.OK);
+	}
+	
+	/********************************** Get country population ***********************************/
+	@RequestMapping(value="/country/popul",method=RequestMethod.GET,produces=MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<PopulationVO>> getCountryPopulation()
+	{
+		List<PopulationVO> countryPopulation =  countryService.getPopulation();
+		if(countryPopulation == null)
+		{
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+		return new ResponseEntity<List<PopulationVO>>(countryPopulation, HttpStatus.OK);
+	}
+	
+	
 }

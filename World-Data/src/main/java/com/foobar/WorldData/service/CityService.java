@@ -1,6 +1,7 @@
 package com.foobar.WorldData.service;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -13,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.foobar.WorldData.dao.CityDao;
 import com.foobar.WorldData.model.City;
+import com.foobar.WorldData.model.PopulationVO;
 import com.foobar.WorldData.utility.WorldDataExcelGenerator;
 
 @Service
@@ -123,4 +125,17 @@ public class CityService {
 			e.printStackTrace();
 		}
 	}
+	
+	public List<PopulationVO> getCityPopulationData(String countryCode)
+	{
+		List<PopulationVO> populationVOList = new ArrayList<>();
+		List<Object[]> cityList =  cityDao.getPopulation(countryCode);
+		for(Object[] city : cityList)
+		{
+			populationVOList.add(new PopulationVO((String) city[0],(Integer) city[1]));
+		}
+		
+		return populationVOList;
+	}
+	
 }
