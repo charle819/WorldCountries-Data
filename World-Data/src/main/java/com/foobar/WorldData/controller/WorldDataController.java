@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -43,7 +42,7 @@ public class WorldDataController {
 
 	/********************************** Retrieve City by Name ***********************************/	
 	
-	@RequestMapping(value = "/city/{name}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/city/{name}", method = RequestMethod.GET)
 	public ResponseEntity<City> getCityByName(@PathVariable(value = "name") String name) {
 		City city = cityService.getCityByName(name);
 		if (city == null) {
@@ -94,7 +93,7 @@ public class WorldDataController {
 
 	/********************************** Retrieve Cities by CountryCode ***********************************/
 	
-	@RequestMapping(value = "/city" ,method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/city" ,method = RequestMethod.GET)
 	public ResponseEntity<List<City>> getCitiesByCountryCode(@RequestParam(value="code",required=false) String countryCode) {
 		List<City> cities = cityService.getCitiesByCountryCode(countryCode);
 
@@ -106,7 +105,7 @@ public class WorldDataController {
 
 	/********************************** Get No of Cities ***********************************/
 	
-	@RequestMapping(value="/city/size",method=RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value="/city/size",method=RequestMethod.GET)
 	public ResponseEntity<Long> getNoOfCities()
 	{
 		Long noOfCities = cityService.getNoOFCities();
@@ -115,7 +114,7 @@ public class WorldDataController {
 
 	
 	/********************************** Get all cities between a range ***********************************/
-	@RequestMapping(value="/city/all",method=RequestMethod.GET,produces=MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value="/city/all",method=RequestMethod.GET)
 	public ResponseEntity<List<City>> getAllCitiesByRange(@RequestParam(value="start",required=false,defaultValue="0") int startIndex ,@RequestParam(value="total",required=false, defaultValue="10") int noOfCities )
 	{
 		LOGGER.info("start : "+startIndex+"  end : "+noOfCities);
@@ -128,7 +127,7 @@ public class WorldDataController {
 	}
 	
 	/********************************** Get city population ***********************************/
-	@RequestMapping(value="city/popul",method=RequestMethod.GET,produces=MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value="city/popul",method=RequestMethod.GET)
 	public ResponseEntity<List<PopulationVO>> getCityPopulation(@RequestParam(value="code",required=false,defaultValue="AFG") String countryCode)
 	{
 		List<PopulationVO> cityPopulation = cityService.getCityPopulationData(countryCode);
@@ -153,7 +152,7 @@ public class WorldDataController {
 	
 	/********************************** Fetch City by Name ***********************************/	
 	
-	@RequestMapping(value="/country/{name}",method=RequestMethod.GET,produces=MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value="/country/{name}",method=RequestMethod.GET)
 	public ResponseEntity<Country> getCountry(@PathVariable(value="name") String countryName)
 	{
 		Country country =  countryService.getCountyByName(countryName);
@@ -166,7 +165,7 @@ public class WorldDataController {
 	}
 	
 	/********************************** Update Country ***********************************/
-	@RequestMapping(value="country/{name}",method=RequestMethod.PUT,produces=MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value="country/{name}",method=RequestMethod.PUT)
 	public ResponseEntity<Country> updateCountry(@RequestBody Country country,@PathVariable(value="name") String countryName)
 	{
 		Country updatedCountry = countryService.updateCountryDetails(country);
@@ -178,7 +177,7 @@ public class WorldDataController {
 	}
 	
 	/********************************** Get all countries between a range ***********************************/
-	@RequestMapping(value="/country/all",method=RequestMethod.GET,produces=MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value="/country/all",method=RequestMethod.GET)
 	public ResponseEntity<List<Country>> getCountries(@RequestParam(value="start", defaultValue="0",required=false) int startIndex,@RequestParam(value="total",defaultValue="10",required=false) int total)
 	{
 		List<Country> countries = countryService.getCoutries(startIndex, total);
@@ -190,7 +189,7 @@ public class WorldDataController {
 	}
 	
 	/********************************** Get country population ***********************************/
-	@RequestMapping(value="/country/popul",method=RequestMethod.GET,produces=MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value="/country/popul",method=RequestMethod.GET)
 	public ResponseEntity<List<PopulationVO>> getCountryPopulation()
 	{
 		List<PopulationVO> countryPopulation =  countryService.getPopulation();

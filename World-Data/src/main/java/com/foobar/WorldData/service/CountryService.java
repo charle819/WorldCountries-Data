@@ -1,9 +1,7 @@
 package com.foobar.WorldData.service;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.logging.Logger;
 
 import javax.transaction.Transactional;
@@ -11,7 +9,7 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.foobar.WorldData.dao.CountryDao;import com.foobar.WorldData.model.Continent;
+import com.foobar.WorldData.dao.CountryDao;
 import com.foobar.WorldData.model.Country;
 import com.foobar.WorldData.model.PopulationVO;
 

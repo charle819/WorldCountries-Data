@@ -7,7 +7,9 @@ import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
 
+@XmlRootElement(name="Country")
 @Entity
 @Table(name = "country")
 public class Country implements Serializable {
