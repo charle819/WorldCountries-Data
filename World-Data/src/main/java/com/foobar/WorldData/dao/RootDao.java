@@ -2,6 +2,7 @@ package com.foobar.WorldData.dao;
 
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -49,4 +50,5 @@ public abstract class RootDao<K, T extends Serializable> {
 	protected Criteria getCriteria() {
 		return getSession().createCriteria(persistenceClass);
 	}
+	
 }
